@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "add-two-integers_2235"
+name = "rust-exercise"
 version = "0.1.0"
