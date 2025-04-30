@@ -10,6 +10,7 @@ mod problem_1929;
 mod problem_2114;
 mod problem_2160;
 mod problem_2235;
+mod problem_2325;
 mod problem_771;
 
 fn main() {
