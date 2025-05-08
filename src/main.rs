@@ -1,5 +1,6 @@
 mod problem_1108;
 mod problem_1281;
+mod problem_1290;
 mod problem_1313;
 mod problem_1365;
 mod problem_1431;
