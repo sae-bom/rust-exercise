@@ -1,3 +1,4 @@
+mod problem_1281;
 mod problem_1365;
 mod problem_1431;
 mod problem_1470;
