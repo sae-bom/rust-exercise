@@ -1,4 +1,5 @@
-pub fn most_words_found(sentences: Vec<String>) -> i32 {
+#[allow(dead_code)]
+pub fn most_words_found(sentences: &[String]) -> i32 {
     sentences
         .iter()
         .map(|sentence| sentence.split(' ').collect::<Vec<&str>>().len())

@@ -1,4 +1,5 @@
-pub fn final_value_after_operations(operations: Vec<String>) -> i32 {
+#[allow(dead_code)]
+pub fn final_value_after_operations(operations: &[String]) -> i32 {
     operations
         .iter()
         .map(|s| {

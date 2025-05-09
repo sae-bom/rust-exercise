@@ -1,6 +1,7 @@
 use std::collections::{HashMap, hash_map::Entry};
 
-pub fn decode_message(key: String, message: String) -> String {
+#[allow(dead_code)]
+pub fn decode_message(key: &str, message: &str) -> String {
     let mut convert_map: HashMap<char, char> = HashMap::new();
     convert_map.insert(' ', ' ');
 
