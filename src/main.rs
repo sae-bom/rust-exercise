@@ -15,7 +15,6 @@ mod problem_1688;
 mod problem_1720;
 mod problem_1773;
 mod problem_1859;
-mod problem_1920;
 mod problem_1929;
 mod problem_2011;
 mod problem_2037;
