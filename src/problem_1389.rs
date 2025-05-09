@@ -1,5 +1,6 @@
 use std::iter::zip;
 
+#[allow(dead_code)]
 pub fn create_target_array(nums: Vec<i32>, index: Vec<i32>) -> Vec<i32> {
     let mut result: Vec<i32> = Vec::with_capacity(nums.len());
     for (num, i) in zip(nums, index) {

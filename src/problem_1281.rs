@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub fn subtract_product_and_sum(mut n: i32) -> i32 {
     let mut digits = Vec::new();
     while n > 0 {
