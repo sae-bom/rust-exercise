@@ -1,3 +1,4 @@
-pub fn defang_ip_addr(address: String) -> String {
-    address.replace(".", "[.]")
+#[allow(dead_code)]
+pub fn defang_ip_addr(address: &str) -> String {
+    address.replace('.', "[.]")
 }

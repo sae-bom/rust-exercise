@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub fn build_array(mut nums: Vec<i32>) -> Vec<i32> {
     let n: usize = nums.len();
     let n_i32: i32 = n.try_into().expect("1 <= nums.length <= 1000");
@@ -12,11 +13,11 @@ pub fn build_array(mut nums: Vec<i32>) -> Vec<i32> {
 
         let mut idx = loop_start_idx;
         loop {
-            if nums[idx] as usize == loop_start_idx {
+            if loop_start_idx == nums[idx].try_into().unwrap() {
                 nums[idx] = loop_start_num + n_i32;
                 break;
             }
-            let prev_num = nums[idx] as usize;
+            let prev_num = nums[idx].try_into().unwrap();
             nums[idx] = nums[prev_num] + n_i32;
             idx = prev_num;
         }
