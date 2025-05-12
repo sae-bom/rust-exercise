@@ -1,26 +1,24 @@
+use std::collections::BTreeMap;
+use std::collections::HashMap;
+
 #[allow(dead_code)]
 pub fn smaller_numbers_than_current(nums: &[i32]) -> Vec<i32> {
-    let mut num_idx_pair = nums
-        .iter()
-        .enumerate()
-        .map(|(idx, &num)| (num, idx))
-        .collect::<Vec<(i32, usize)>>();
+    let num_counter = nums.iter().fold(BTreeMap::new(), |mut ctr, num| {
+        *ctr.entry(*num).or_insert(0) += 1;
+        ctr
+    });
 
-    num_idx_pair.sort_unstable_by_key(|&(x, _)| x);
+    let num_cumulation: HashMap<i32, i32> = num_counter
+        .into_iter()
+        .scan(0, |cumulation, (n, count)| {
+            *cumulation += count;
+            Some((n, *cumulation - count))
+        })
+        .collect();
 
-    let mut prev_num: Option<i32> = None;
-    let mut prev_i: Option<usize> = None;
-    let mut result = vec![0; nums.len()];
-    for (i, item) in num_idx_pair.iter().enumerate() {
-        if prev_num.is_some() && prev_num.unwrap() == item.0 {
-            result[item.1] = prev_i.unwrap().try_into().unwrap();
-            continue;
-        }
-        result[item.1] = i.try_into().unwrap();
-        prev_i = Some(i);
-        prev_num = Some(item.0);
-    }
-    result
+    nums.iter()
+        .map(|n| *num_cumulation.get(n).expect("Key 'n' must be in the map"))
+        .collect()
 }
 
 #[cfg(test)]

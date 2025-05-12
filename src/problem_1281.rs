@@ -1,12 +1,18 @@
 #[allow(dead_code)]
-pub fn subtract_product_and_sum(mut n: i32) -> i32 {
-    let mut digits = Vec::new();
-    while n > 0 {
-        digits.push(n % 10);
-        n /= 10;
-    }
+pub fn subtract_product_and_sum(n: i32) -> i32 {
+    let (product, sum) = std::iter::successors(Some((n, None)), |(n, _)| {
+        if *n == 0 {
+            return None;
+        }
+        let digit = n % 10;
+        Some((n / 10, Some(digit)))
+    })
+    .filter_map(|(_, digit)| digit)
+    .fold((1, 0), |(product, sum), digit| {
+        (product * digit, sum + digit)
+    });
 
-    digits.iter().product::<i32>() - digits.iter().sum::<i32>()
+    product - sum
 }
 
 #[cfg(test)]
