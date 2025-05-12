@@ -1,9 +1,14 @@
 #[allow(dead_code)]
 pub fn get_concatenation(nums: &[i32]) -> Vec<i32> {
-    let len = nums.len();
-    let mut result: Vec<i32> = vec![0; len * 2];
+    [nums, nums].concat()
+}
 
-    result[..len].clone_from_slice(nums);
-    result[len..2 * len].clone_from_slice(nums);
-    result
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn example_1() {
+        assert_eq!(get_concatenation(&[1, 2, 1]), &[1, 2, 1, 1, 2, 1]);
+    }
 }
