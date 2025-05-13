@@ -5,7 +5,11 @@ pub fn sort_sentence(s: &str) -> String {
 
     sorted_words
         .iter()
-        .map(|&str| &str[..str.len() - 1])
+        .map(|&str| {
+            str.get(..str.len() - 1).expect(
+                "It is always within the valid range, given that s.length >= 2 is guaranteed.",
+            )
+        })
         .collect::<Vec<&str>>()
         .join(" ")
 }
