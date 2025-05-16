@@ -2,19 +2,12 @@ use std::collections::HashMap;
 
 #[allow(dead_code)]
 pub fn num_identical_pairs(nums: &[i32]) -> i32 {
-    let mut counter: HashMap<i32, u16> = HashMap::new();
+    let counter: HashMap<i32, i32> = nums.iter().fold(HashMap::new(), |mut ctr, elem| {
+        *ctr.entry(*elem).or_insert(0) += 1;
+        ctr
+    });
 
-    for elem in nums {
-        counter.entry(*elem).and_modify(|e| *e += 1).or_insert(1);
-    }
-
-    let mut result = 0;
-
-    for val in counter.values().filter(|&x| *x >= 2) {
-        result += val * (val - 1) / 2;
-    }
-
-    i32::from(result)
+    counter.values().map(|val| (val * (val - 1) / 2)).sum()
 }
 
 #[cfg(test)]

@@ -1,9 +1,11 @@
 #[allow(dead_code)]
-pub fn running_sum(mut nums: Vec<i32>) -> Vec<i32> {
-    for idx in 1..nums.len() {
-        nums[idx] += nums[idx - 1];
-    }
-    nums
+pub fn running_sum(nums: Vec<i32>) -> Vec<i32> {
+    nums.into_iter()
+        .scan(0, |sum, num| {
+            *sum += num;
+            Some(*sum)
+        })
+        .collect()
 }
 
 #[cfg(test)]
