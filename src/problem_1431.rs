@@ -1,6 +1,13 @@
 #[allow(dead_code)]
 pub fn kids_with_candies(candies: &[i32], extra_candies: i32) -> Vec<bool> {
-    let max_candy = candies.iter().max().expect("candies.length >= 2");
+    if candies.len() < 2 {
+        return vec![true; candies.len()];
+    }
+
+    let max_candy = candies
+        .iter()
+        .max()
+        .expect("It is checked that candies.length >= 2");
     let at_least_candy = max_candy - extra_candies;
 
     candies.iter().map(|&x| x >= at_least_candy).collect()

@@ -11,19 +11,113 @@ impl Item {
 }
 
 #[allow(dead_code)]
-pub fn count_matches(items: Vec<Vec<String>>, rule_key: &str, rule_value: &str) -> i32 {
-    items
+pub fn count_matches(
+    items: Vec<Vec<String>>,
+    rule_key: &str,
+    rule_value: &str,
+) -> Result<usize, String> {
+    Ok(items
         .into_iter()
         .map(|i| {
-            let [type_, color, name] = i.try_into().expect("Each item should have exactly 3 fields");
-            Item::new(type_, color, name)
+            let [type_, color, name] = i
+                .try_into()
+                .map_err(|_| "Each item should have exactly 3 fields.")?;
+            Ok(Item::new(type_, color, name))
         })
-        .filter(|i| match rule_key {
-            "type" => &i.type_,
-            "color" => &i.color,
-            "name" => &i.name,
-            _ => panic!("rule_key should be one of three above")
-        } == rule_value)
-        .count()
-        .try_into().expect("The number of items is within i32 range")
+        .filter_map(|i| match i {
+            Ok(val) => {
+                if match rule_key {
+                    "type" => &val.type_,
+                    "color" => &val.color,
+                    "name" => &val.name,
+                    _ => return Some(Err("Unknown rule_key given.")),
+                } == rule_value
+                {
+                    Some(Ok(val))
+                } else {
+                    None
+                }
+            }
+            Err(e) => Some(Err(e)),
+        })
+        .collect::<Result<Vec<_>, _>>()?
+        .len())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn example_1() {
+        let result = count_matches(
+            vec![
+                vec!["phone".to_string(), "blue".to_string(), "pixel".to_string()],
+                vec![
+                    "computer".to_string(),
+                    "silver".to_string(),
+                    "lenovo".to_string(),
+                ],
+                vec![
+                    "phone".to_string(),
+                    "gold".to_string(),
+                    "iphone".to_string(),
+                ],
+            ],
+            "color",
+            "silver",
+        );
+        assert_eq!(result, Ok(1));
+    }
+
+    #[test]
+    fn example_2() {
+        let result = count_matches(
+            vec![
+                vec!["phone".to_string(), "blue".to_string(), "pixel".to_string()],
+                vec![
+                    "computer".to_string(),
+                    "silver".to_string(),
+                    "lenovo".to_string(),
+                ],
+                vec![
+                    "phone".to_string(),
+                    "gold".to_string(),
+                    "iphone".to_string(),
+                ],
+            ],
+            "type",
+            "phone",
+        );
+        assert_eq!(result, Ok(2));
+    }
+
+    #[test]
+    fn invalid_item() {
+        let result = count_matches(
+            vec![vec![
+                "phone".to_string(),
+                "blue".to_string(),
+                "pixel".to_string(),
+                "melon".to_string(),
+            ]],
+            "type",
+            "blah",
+        );
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn invalid_rule_key() {
+        let result = count_matches(
+            vec![vec![
+                "phone".to_string(),
+                "blue".to_string(),
+                "pixel".to_string(),
+            ]],
+            "unknown_rule_key",
+            "blah",
+        );
+        assert!(result.is_err());
+    }
 }

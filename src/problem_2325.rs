@@ -15,7 +15,11 @@ pub fn decode_message(key: &str, message: &str) -> String {
                 match convert_map.entry(c) {
                     Entry::Occupied(_) => Ok(ctr),
                     Entry::Vacant(_) => {
-                        convert_map.insert(c, char::from_u32(ctr + u32::from('a')).unwrap());
+                        convert_map.insert(
+                            c,
+                            char::from_u32(ctr + u32::from('a'))
+                                .expect("ctr is guaranteed to be between 0 and 25, inclusive."),
+                        );
                         Ok(ctr + 1)
                     }
                 }
@@ -23,6 +27,10 @@ pub fn decode_message(key: &str, message: &str) -> String {
         });
     message
         .chars()
-        .map(|c| convert_map.get(&c).unwrap())
+        .map(|c| {
+            convert_map
+                .get(&c)
+                .expect("convert_map contains all 26 alphabet letters.")
+        })
         .collect()
 }
