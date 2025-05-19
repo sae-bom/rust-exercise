@@ -1,10 +1,6 @@
 #[allow(dead_code)]
 pub fn maximum_wealth(accounts: &[Vec<i32>]) -> i32 {
-    let wealth: Vec<i32> = accounts.iter().map(|x| x.iter().sum()).collect();
-    wealth
-        .into_iter()
-        .max()
-        .expect("Customer must have at least 1 account!")
+    accounts.iter().map(|x| x.iter().sum()).max().unwrap_or(0)
 }
 
 #[cfg(test)]
@@ -27,5 +23,11 @@ mod tests {
     fn example_3() {
         let result = maximum_wealth(&[vec![2, 8, 7], vec![7, 1, 3], vec![1, 9, 5]]);
         assert_eq!(result, 17);
+    }
+
+    #[test]
+    fn no_customer() {
+        let result = maximum_wealth(&[]);
+        assert_eq!(result, 0);
     }
 }
