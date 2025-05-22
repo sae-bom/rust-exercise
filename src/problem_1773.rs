@@ -1,15 +1,3 @@
-struct Item {
-    type_: String,
-    color: String,
-    name: String,
-}
-
-impl Item {
-    fn new(type_: String, color: String, name: String) -> Self {
-        Self { type_, color, name }
-    }
-}
-
 #[allow(dead_code)]
 pub fn count_matches(
     items: Vec<Vec<String>>,
@@ -18,30 +6,23 @@ pub fn count_matches(
 ) -> Result<usize, String> {
     Ok(items
         .into_iter()
-        .map(|i| {
-            let [type_, color, name] = i
+        .map(|item| {
+            let [type_, color, name] = item
                 .try_into()
                 .map_err(|_| "Each item should have exactly 3 fields.")?;
-            Ok(Item::new(type_, color, name))
-        })
-        .filter_map(|i| match i {
-            Ok(val) => {
-                if match rule_key {
-                    "type" => &val.type_,
-                    "color" => &val.color,
-                    "name" => &val.name,
-                    _ => return Some(Err("Unknown rule_key given.")),
-                } == rule_value
-                {
-                    Some(Ok(val))
-                } else {
-                    None
-                }
-            }
-            Err(e) => Some(Err(e)),
+
+            let value = match rule_key {
+                "type" => type_,
+                "color" => color,
+                "name" => name,
+                _ => return Err("Unknown rule_key given."),
+            };
+
+            Ok(usize::from(value == rule_value))
         })
         .collect::<Result<Vec<_>, _>>()?
-        .len())
+        .iter()
+        .sum::<usize>())
 }
 
 #[cfg(test)]

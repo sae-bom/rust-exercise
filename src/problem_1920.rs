@@ -1,14 +1,13 @@
 #[allow(dead_code)]
 pub fn build_array(nums: &[usize]) -> Result<Vec<usize>, String> {
-    let len = nums.len();
     nums.iter()
         .map(|&n| {
-            if n >= len {
+            let Some(num) = nums.get(n) else {
                 return Err(format!("Invalid index: {n}"));
-            }
-            Ok(*nums.get(n).expect("0 <= n < nums.length"))
+            };
+            Ok(*num)
         })
-        .collect::<Result<Vec<usize>, String>>()
+        .collect::<Result<Vec<_>, String>>()
 }
 
 #[cfg(test)]

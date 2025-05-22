@@ -7,7 +7,7 @@ pub fn decode_message(key: &str, message: &str) -> String {
 
     let _ = key
         .chars()
-        .filter(|&c| c != ' ')
+        .filter(|&c| c.is_ascii_lowercase())
         .try_fold(0, |ctr: u32, c| {
             if ctr > 25 {
                 Err(ctr)
@@ -15,11 +15,8 @@ pub fn decode_message(key: &str, message: &str) -> String {
                 match convert_map.entry(c) {
                     Entry::Occupied(_) => Ok(ctr),
                     Entry::Vacant(_) => {
-                        convert_map.insert(
-                            c,
-                            char::from_u32(ctr + u32::from('a'))
-                                .expect("ctr is guaranteed to be between 0 and 25, inclusive."),
-                        );
+                        let decode_char = char::from_u32(ctr + u32::from('a')).ok_or(ctr)?;
+                        convert_map.insert(c, decode_char);
                         Ok(ctr + 1)
                     }
                 }
@@ -27,10 +24,6 @@ pub fn decode_message(key: &str, message: &str) -> String {
         });
     message
         .chars()
-        .map(|c| {
-            convert_map
-                .get(&c)
-                .expect("convert_map contains all 26 alphabet letters.")
-        })
+        .map(|c| *convert_map.get(&c).unwrap_or(&c))
         .collect()
 }

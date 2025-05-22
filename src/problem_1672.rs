@@ -1,7 +1,6 @@
 #[allow(dead_code)]
 pub fn maximum_wealth(accounts: &[Vec<i32>]) -> i32 {
-    let wealth: Vec<i32> = accounts.iter().map(|x| x.iter().sum()).collect();
-    wealth.into_iter().max().unwrap_or(0)
+    accounts.iter().map(|x| x.iter().sum()).max().unwrap_or(0)
 }
 
 #[cfg(test)]
