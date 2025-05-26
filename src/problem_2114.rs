@@ -1,10 +1,29 @@
 #[allow(dead_code)]
-pub fn most_words_found(sentences: &[String]) -> i32 {
+pub fn most_words_found(sentences: &[String]) -> usize {
     sentences
         .iter()
         .map(|sentence| sentence.split(' ').collect::<Vec<&str>>().len())
         .max()
-        .expect("Parameter 'sentences' is not empty")
-        .try_into()
-        .expect("Length of sentences do not exceed i32 range")
+        .unwrap_or(0)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn example_1() {
+        let result = most_words_found(&[
+            "alice and bob love leetcode".to_string(),
+            "i think so too".to_string(),
+            "this is great thanks very much".to_string(),
+        ]);
+        assert_eq!(result, 6);
+    }
+
+    #[test]
+    fn no_input() {
+        let result = most_words_found(&[]);
+        assert_eq!(result, 0);
+    }
 }
