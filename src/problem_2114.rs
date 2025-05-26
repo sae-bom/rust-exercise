@@ -2,7 +2,7 @@
 pub fn most_words_found(sentences: &[String]) -> usize {
     sentences
         .iter()
-        .map(|sentence| sentence.split(' ').collect::<Vec<&str>>().len())
+        .map(|sentence| sentence.split_whitespace().count())
         .max()
         .unwrap_or(0)
 }
