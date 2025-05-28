@@ -1,15 +1,13 @@
 #[allow(dead_code)]
-pub fn shuffle(nums: &[i32]) -> Result<Vec<i32>, &str> {
-    if nums.is_empty() || nums.len() > 500 || nums.len() % 2 != 0 {
-        return Err("Invalid input: nums.len() must be even and in the range 1 to 500 inclusive");
+pub fn shuffle(nums: &[i32]) -> Result<Vec<i32>, &'static str> {
+    if nums.len() % 2 != 0 {
+        return Err("Invalid input: nums.len() must be even");
     }
 
-    let n: usize = nums.len() / 2;
-    Ok(nums
-        .get(..n)
-        .expect("1 <= n < nums.length")
+    let (left, right) = nums.split_at(nums.len() / 2);
+    Ok(left
         .iter()
-        .zip(nums.get(n..).expect("1 <= n < nums.length"))
+        .zip(right.iter())
         .flat_map(|(&x, &y)| [x, y])
         .collect())
 }
@@ -22,5 +20,11 @@ mod tests {
     fn example_1() {
         let result = shuffle(&[2, 5, 1, 3, 4, 7]);
         assert_eq!(result, Ok(vec![2, 3, 5, 4, 1, 7]));
+    }
+
+    #[test]
+    fn empty_input() {
+        let result = shuffle(&[]);
+        assert_eq!(result, Ok(vec![]));
     }
 }
