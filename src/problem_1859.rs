@@ -7,8 +7,8 @@ pub fn sort_sentence(s: &str) -> String {
     sorted_words.sort_unstable_by_key(|str| str.chars().last());
 
     sorted_words
-        .iter()
-        .map(|&str| {
+        .into_iter()
+        .map(|str| {
             str.get(..str.len() - 1).expect(
                 "It is always within the valid range, given that s.length >= 2 is guaranteed.",
             )
